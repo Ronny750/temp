@@ -1,0 +1,146 @@
+Router>en
+Router#conf t
+Router(config)#host R1
+R1(config)#interface GigabitEthernet0/0
+R1(config-if)#ip address 192.168.1.1 255.255.255.0
+R1(config-if)#no shut
+R1(config)#interface Serial0/0/0
+R1(config-if)#ip address 10.1.1.2 255.255.255.252
+R1(config-if)#no shut
+R1(config-if)#^Z
+R1#exit
+
+
+Router>en
+Router#conf t
+Router(config)#host R2
+R2(config)#interface GigabitEthernet0/0
+R2(config-if)#ip address 192.168.2.1 255.255.255.0
+R2(config-if)#no shut
+R2(config)#interface Serial0/0/0
+R2(config-if)#ip address 10.1.1.1 255.255.255.252
+R2(config-if)#no shut
+R2(config)#interface Serial0/0/1
+R2(config-if)#ip address 10.2.2.1 255.255.255.252
+R2(config-if)#no shut
+R2(config-if)#^Z
+R2#exit
+
+
+Router>en
+Router#conf t
+Router(config)#host R3
+R3(config)#interface GigabitEthernet0/0
+R3(config-if)#ip address 192.168.3.1 255.255.255.0
+R3(config-if)#no shut
+R3(config)#interface Serial0/0/0
+R3(config-if)#ip address 10.2.2.2 255.255.255.252
+R3(config-if)#no shut
+R3(config-if)#^Z
+R3#exit
+
+o/p:- show ip interface brief all routers
+
+
+
+Configure RIP on routers:-
+
+R1>en
+R1#conf t
+R1(config)#router rip
+R1(config-router)#network 192.168.1.0
+R1(config-router)#network 10.1.1.0
+R1(config-router)#^Z
+R1#exit
+
+
+R2>en
+R2#conf t
+R2(config)#router rip
+R2(config-router)#network 10.1.1.0
+R2(config-router)#network 192.168.2.0
+R2(config-router)#network 10.2.2.0
+R2(config-router)#^Z
+R2#exit
+
+
+R3>en
+R3#conf t
+R3(config)#router rip
+R3(config-router)#network 192.168.3.0
+R3(config-router)#network 10.2.2.0
+R3(config-router)#^Z
+R3#exit
+
+o/p:- show ip route all routers
+
+
+Configure Local AAA Authentication for Console Lines on R1 :-
+
+R1>en
+R1#conf t
+R1(config)#username aaaAdmin secret aaapwd
+R1(config)#aaa new-model
+R1(config)#aaa authentication login default local
+R1(config)#line console 0
+R1(config-line)#login authentication default
+R1(config-line)#^Z
+R1#exit
+
+User Access Verification
+Username: aaaAdmin
+Password: 
+R1>
+
+
+
+Configure Local AAA Authentication for vty Lines on R1:-
+
+R1>en
+R1#conf t
+R1(config)#ip domain-name sic.com
+R1(config)#crypto key generate rsa
+The name for the keys will be: R1.sic.com
+Choose the size of the key modulus in the range of 360 to 2048 for yourGeneral Purpose Keys.
+ Choosing a key modulus greater than 512 may takea few minutes.
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+R1(config)#aaa authentication login SSH-LOGIN local
+*Mar 1 2:2:12.412: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R1(config)#line vty 0 4
+R1(config-line)#login authentication SSH-LOGIN
+R1(config-line)#transport input ssh
+R1(config-line)#^Z
+R1#exit
+
+
+
+Configure Server-Based AAA Authentication Using TACACS+ on R2 :-
+
+R2>en
+R2#conf t
+R2(config)#username admin2 secret pwd2
+R2(config)#tacacs-server host 192.168.2.2
+R2(config)#tacacs-server key tacacspwd
+R2(config)#aaa new-model
+R2(config)#aaa authentication login default group tacacs+ local
+R2(config)#line console 0
+R2(config-line)#login authentication default
+R2(config-line)#^Z
+R2#exit
+
+
+Configure Server-Based AAA Authentication Using RADIUS on R3:-
+
+R3>en
+R3#conf t
+R3(config)#username admin3 secret pwd3
+R3(config)#radius-server host 192.168.3.2
+R3(config)#radius-server key radiuspwd
+R3(config)#aaa new-model
+R3(config)#aaa authentication login default group radius local
+R3(config)#line console 0
+R3(config-line)#login authentication default
+R3(config-line)#^Z
+R3#exit
+
