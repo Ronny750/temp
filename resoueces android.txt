@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_size"
+    android:background="@color/backgroundColor"
+    android:gravity="center">
+
+    <!-- Welcome Message -->
+    <TextView
+        android:id="@+id/welcomeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_message"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/text_size"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_size"/>
+
+    <!-- Image -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/backgroundimg1"
+        android:contentDescription="Sample Image"/>
+
+</LinearLayout>
+
+
+MainActivity.kt
+package com.example.a15wla;
+
+import android.graphics.Color
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import android.widget.ImageView
+import android.widget.TextView
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Get references to views
+        val welcomeTextView: TextView = findViewById(R.id.welcomeTextView)
+        val imageView: ImageView = findViewById(R.id.imageView)
+
+        // Set text color programmatically
+        val color = ContextCompat.getColor(this, R.color.primaryColor)
+        welcomeTextView.setTextColor(color)
+
+
+    }
+}
+
+color.xml
+<resources>
+    <color name="primaryColor">#6200EE</color>
+    <color name="secondaryColor">#03DAC5</color>
+    <color name="backgroundColor">#F5F5F5</color>
+    <color name="textColor">#000000</color>
+</resources>
+
+string.xml
+<resources>
+    <string name="app_name">MyAndroidApp</string>
+    <string name="welcome_message">Welcome to My App!</string>
+</resources>
+
+
+theme.xml
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.MyApp" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
+    </style>
+</resources>
+
+dimension
+<resources>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="padding_size">16dp</dimen>
+</resources>
+
+
+androidmainfest:
+
+  android:theme="@style/Theme.MyApp"
